@@ -41,7 +41,6 @@ const countUp = () => {
 };
 
 const handleTouchstart = (ev: MouseEvent | TouchEvent) => {
-  console.log('touchstart');
   pressedDuration.value = 0;
   countUp();
 };
@@ -64,7 +63,6 @@ const handleTouchend = () => {
   font-size: 2rem;
   transition: background-image 3s;
   display: block;
-  cursor: pointer;
   padding: 0;
   background-image: linear-gradient(
     90deg,
