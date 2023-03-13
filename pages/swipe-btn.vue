@@ -16,6 +16,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="btn-arrow"
+        :class="{ 'is-animation': isAnimation }"
       >
         <path
           stroke-linecap="round"
@@ -41,6 +42,7 @@ const isShowInfo = ref(false);
 const isSwipeDone = ref(false);
 const startPosition = ref<number | null>(null);
 const currentPosition = ref<number | null>(null);
+const isAnimation = ref<boolean>(true);
 
 const distance = computed(() => {
   if (currentPosition.value === null || startPosition.value === null) return 0;
@@ -65,7 +67,7 @@ const onCursorMove = (ev: MouseEvent | TouchEvent) => {
 };
 
 const handleTouchstart = (ev: MouseEvent | TouchEvent) => {
-  console.log('touchstart');
+  isAnimation.value = false;
   if (ev instanceof TouchEvent) {
     startPosition.value = ev.touches[0].clientX;
     window.ontouchmove = onCursorMove;
@@ -77,7 +79,7 @@ const handleTouchstart = (ev: MouseEvent | TouchEvent) => {
 };
 
 const handleTouchend = () => {
-  console.log('touchend');
+  isAnimation.value = true;
   isShowBg.value = false;
   window.ontouchmove = null;
   if (progress.value < 1) {
@@ -126,6 +128,23 @@ const handleTouchend = () => {
   mix-blend-mode: difference;
 }
 
+@keyframes shakeX {
+  0%,
+  40%,
+  100% {
+    transform: translate3d(0, -50%, 0);
+  }
+
+  10%,
+  30% {
+    transform: translate3d(0.2rem, -50%, 0);
+  }
+
+  20% {
+    transform: translate3d(-0.2rem, -50%, 0);
+  }
+}
+
 .btn-arrow {
   width: 2rem;
   height: 2rem;
@@ -133,6 +152,9 @@ const handleTouchend = () => {
   top: 50%;
   left: 0.5rem;
   transform: translate3d(0, -50%, 0);
+}
+.btn-arrow.is-animation {
+  animation: 3s linear 0s infinite shakeX;
 }
 
 .bg-full {
