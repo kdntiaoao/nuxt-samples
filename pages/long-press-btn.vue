@@ -7,6 +7,7 @@
       :style="`--progress: ${progress}`"
       @touchstart="handleTouchstart"
       @mousedown="handleTouchstart"
+      @mouseleave="handleTouchend"
       @touchend="handleTouchend"
       @mouseup="handleTouchend"
     >
@@ -14,7 +15,7 @@
     </button>
     <p v-else>pressed!!</p>
     <p v-if="isShowInfo">長押ししてください</p>
-    <!-- <p>{{ { pressedDuration } }}</p> -->
+    <p>{{ { pressedDuration } }}</p>
   </div>
 </template>
 
@@ -46,6 +47,7 @@ const handleTouchstart = (ev: MouseEvent | TouchEvent) => {
 };
 
 const handleTouchend = () => {
+  console.log('touchend');
   window.clearTimeout(timeId.value);
   if (progress.value < 1) {
     pressedDuration.value = 0;
@@ -64,6 +66,8 @@ const handleTouchend = () => {
   transition: background-image 3s;
   display: block;
   padding: 0;
+  user-select: none;
+  margin: 0;
   background-image: linear-gradient(
     90deg,
     #000 0 calc(var(--progress) * 100%),

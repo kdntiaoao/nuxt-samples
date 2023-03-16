@@ -105,6 +105,7 @@ const handleTouchend = () => {
   position: relative;
   transition: background-image 3s;
   color: #fff;
+  user-select: none;
   background: linear-gradient(
     90deg,
     #f5a4a4,
@@ -118,6 +119,9 @@ const handleTouchend = () => {
     #8cccf5
   );
 }
+.btn:hover {
+  cursor: pointer;
+}
 .btn::before {
   content: '';
   position: absolute;
@@ -130,6 +134,7 @@ const handleTouchend = () => {
 
 @keyframes shakeX {
   0%,
+  20%,
   40%,
   100% {
     transform: translate3d(0, -50%, 0);
@@ -137,11 +142,21 @@ const handleTouchend = () => {
 
   10%,
   30% {
-    transform: translate3d(0.2rem, -50%, 0);
+    transform: translate3d(0.3rem, -50%, 0);
+  }
+}
+
+@keyframes shakeXHover {
+  0%,
+  20%,
+  40%,
+  100% {
+    transform: translate3d(0, -50%, 0);
   }
 
-  20% {
-    transform: translate3d(-0.2rem, -50%, 0);
+  10%,
+  30% {
+    transform: translate3d(0.4rem, -50%, 0);
   }
 }
 
@@ -153,13 +168,18 @@ const handleTouchend = () => {
   left: 0.5rem;
   transform: translate3d(0, -50%, 0);
 }
+.btn:hover .btn-arrow,
+.btn:hover .btn-arrow.is-animation {
+  animation: 3s linear 0s shakeXHover;
+}
 .btn-arrow.is-animation {
-  animation: 3s linear 0s infinite shakeX;
+  animation: 3s linear 2s infinite shakeX;
 }
 
 .bg-full {
   position: fixed;
   inset: 0;
   z-index: 1;
+  user-select: none;
 }
 </style>
