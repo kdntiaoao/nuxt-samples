@@ -1,7 +1,7 @@
 export function transitionHelper({
   skipTransition = false,
   classNames = [],
-  updateDOM = () => {},
+  updateDOM,
 }) {
   if (skipTransition || !document.startViewTransition) {
     const updateCallbackDone = Promise.resolve(updateDOM()).then(() => {});
