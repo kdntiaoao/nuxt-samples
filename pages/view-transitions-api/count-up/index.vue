@@ -28,29 +28,4 @@ function incrementClick() {
   font-size: 25vw;
   view-transition-name: count;
 }
-
-/* Custom transition */
-@keyframes rotate-out {
-  to {
-    transform: rotate(90deg);
-    opacity: 0;
-  }
-}
-
-@keyframes rotate-in {
-  from {
-    transform: rotate(-90deg);
-    opacity: 0;
-  }
-}
-
-html::view-transition-old(count),
-html::view-transition-new(count) {
-  animation-duration: 200ms;
-  animation-name: rotate-in;
-}
-
-html::view-transition-old(count) {
-  animation-name: rotate-out;
-}
 </style>

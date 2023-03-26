@@ -24,12 +24,12 @@
 import { nextTick } from 'vue';
 import { transitionHelper } from '~~/utils/transitionHelper';
 
+const count = ref(0);
+
 const handleClick = (ev) => {
-  const target = ev.currentTarget;
-  const img = target.querySelector('img');
-  img.style.viewTransitionName = 'full-size';
   transitionHelper({
     async updateDom() {
+      count.value++;
       await nextTick;
     },
   });
@@ -57,56 +57,57 @@ const handleClick = (ev) => {
   object-fit: cover;
   object-position: center;
   contain: layout;
+  view-transition-name: gallery-img;
+  user-select: none;
 }
 </style>
 
 <style>
-.transition-full-size {
-  view-transition-name: full-size;
-  contain: layout;
+body {
+  padding: 5rem;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+}
+
+/* Custom transition */
+@keyframes fade-out {
+  from {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(0);
+    opacity: 0;
+  }
 }
 
 @keyframes fade-in {
   from {
+    transform: scaleX(0);
     opacity: 0;
   }
-}
-
-@keyframes fade-out {
   to {
-    opacity: 0;
+    transform: scaleX(1);
+    opacity: 1;
   }
 }
 
-@keyframes slide-from-right {
-  from {
-    transform: translateX(30px);
-  }
+html::view-transition-old(gallery-img),
+html::view-transition-new(gallery-img) {
+  animation-duration: 800ms;
+  animation-name: fade-in;
 }
 
-@keyframes slide-to-left {
-  to {
-    transform: translateX(-30px);
-  }
-}
-
-::view-transition-old(root) {
-  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-}
-
-::view-transition-new(root) {
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
-}
-
-::view-transition-old(full-size),
-::view-transition-new(full-size) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-::view-transition-image-pair(full-size) {
-  isolation: none;
+html::view-transition-old(gallery-img) {
+  animation-name: fade-out;
 }
 </style>
