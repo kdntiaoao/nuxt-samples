@@ -9,5 +9,9 @@
   },
   "devDependencies": {
     "nuxt": "^3.2.3"
+  },
+  "dependencies": {
+    "modern-css-reset": "^1.4.0",
+    "tesseract.js": "^4.0.3"
   }
 }
