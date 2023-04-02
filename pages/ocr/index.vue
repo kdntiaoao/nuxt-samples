@@ -13,8 +13,8 @@
 import { ref } from 'vue';
 import { createWorker } from 'tesseract.js';
 
-const VIEW_WIDTH = 560;
-const VIEW_HEIGHT = 100;
+const VIEW_WIDTH = 600;
+const VIEW_HEIGHT = 80;
 
 const video = ref<HTMLVideoElement | null>(null);
 const canvasFull = ref<HTMLCanvasElement | null>(null);
@@ -30,6 +30,9 @@ const readImageText = async () => {
     if (!canvasView.value || !result.value) return;
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
+    await worker.setParameters({
+      tessedit_char_whitelist: '0123456789',
+    });
     const {
       data: { text },
     } = await worker.recognize(canvasView.value.toDataURL());
