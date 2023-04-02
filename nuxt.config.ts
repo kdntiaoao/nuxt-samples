@@ -6,4 +6,7 @@ export default defineNuxtConfig({
       'process.env.TESS_ENV': JSON.stringify('production'),
     },
   },
+  devServer: {
+    port: 3001,
+  },
 });
