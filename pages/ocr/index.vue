@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <video class="video" ref="video"></video>
-    <canvas ref="canvas"></canvas>
+  <div class="wrap">
+    <video width="300" height="200" class="video" ref="video"></video>
+    <div class="img-box">
+      <canvas class="canvas" ref="canvasFull"></canvas>
+    </div>
     <p ref="result"></p>
     <button type="button" @click="readImageText">読み取る</button>
   </div>
@@ -11,8 +13,12 @@
 import { ref } from 'vue';
 import { createWorker } from 'tesseract.js';
 
+const VIEW_WIDTH = 560;
+const VIEW_HEIGHT = 100;
+
 const video = ref<HTMLVideoElement | null>(null);
-const canvas = ref<HTMLCanvasElement | null>(null);
+const canvasFull = ref<HTMLCanvasElement | null>(null);
+const canvasView = ref<HTMLCanvasElement | null>(null);
 const result = ref<HTMLParagraphElement | null>(null);
 
 const readImageText = async () => {
@@ -21,12 +27,12 @@ const readImageText = async () => {
   });
 
   (async () => {
-    if (!canvas.value || !result.value) return;
+    if (!canvasView.value || !result.value) return;
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
     const {
       data: { text },
-    } = await worker.recognize(canvas.value.toDataURL());
+    } = await worker.recognize(canvasView.value.toDataURL());
     console.log(text);
     result.value.textContent = text;
     await worker.terminate();
@@ -42,16 +48,21 @@ if (process.client) {
       audio: false,
     })
     .then((stream) => {
-      if (!video.value || !canvas.value) return;
+      if (!video.value || !canvasFull.value) return;
       video.value.srcObject = stream;
       video.value.play();
 
       setInterval(() => {
-        if (!video.value || !canvas.value) return;
-        canvas.value.width = video.value.videoWidth;
-        canvas.value.height = video.value.videoHeight;
-        const ctx = canvas.value.getContext('2d');
-        ctx?.drawImage(
+        if (!video.value || !canvasFull.value) return;
+
+        canvasFull.value.width = video.value.videoWidth;
+        canvasFull.value.height = video.value.videoHeight;
+
+        const ctx = canvasFull.value.getContext('2d');
+
+        if (!ctx) return;
+
+        ctx.drawImage(
           video.value,
           0,
           0,
@@ -59,9 +70,39 @@ if (process.client) {
           video.value.videoHeight,
           0,
           0,
-          canvas.value.width,
-          canvas.value.height
+          canvasFull.value.width,
+          canvasFull.value.height
         );
+
+        const viewRange = {
+          x: (canvasFull.value.width - VIEW_WIDTH) / 2,
+          y: (canvasFull.value.height - VIEW_HEIGHT) / 2,
+          w: VIEW_WIDTH,
+          h: VIEW_HEIGHT,
+        };
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.rect(viewRange.x, viewRange.y, viewRange.w, viewRange.h);
+        ctx.stroke();
+
+        canvasView.value = document.createElement('canvas');
+        canvasView.value.width = VIEW_WIDTH;
+        canvasView.value.height = VIEW_HEIGHT;
+        canvasView.value
+          .getContext('2d')
+          ?.drawImage(
+            canvasFull.value,
+            viewRange.x,
+            viewRange.y,
+            viewRange.w,
+            viewRange.h,
+            0,
+            0,
+            viewRange.w,
+            viewRange.h
+          );
       }, 200);
     })
     .catch((e) => {
@@ -71,9 +112,24 @@ if (process.client) {
 </script>
 
 <style scoped>
+.wrap {
+  padding: 2rem 1rem;
+  max-width: 1000px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .video {
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
-  max-width: 100%;
+  display: none;
+}
+
+.img-box {
+  outline: green;
+}
+
+.canvas {
+  outline: red;
 }
 </style>
