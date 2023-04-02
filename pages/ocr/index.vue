@@ -13,8 +13,9 @@
 import { ref } from 'vue';
 import { createWorker } from 'tesseract.js';
 
-const VIEW_WIDTH = 600;
-const VIEW_HEIGHT = 80;
+const VIEW_WIDTH = 300;
+const ASPECT_RATIO = 7;
+const VIEW_HEIGHT = VIEW_WIDTH / ASPECT_RATIO;
 
 const video = ref<HTMLVideoElement | null>(null);
 const canvasFull = ref<HTMLCanvasElement | null>(null);
@@ -58,8 +59,10 @@ if (process.client) {
       setInterval(() => {
         if (!video.value || !canvasFull.value) return;
 
-        canvasFull.value.width = video.value.videoWidth;
-        canvasFull.value.height = video.value.videoHeight;
+        canvasFull.value.width = VIEW_WIDTH + 50;
+        canvasFull.value.height =
+          (canvasFull.value.width * video.value.videoHeight) /
+          video.value.videoWidth;
 
         const ctx = canvasFull.value.getContext('2d');
 
