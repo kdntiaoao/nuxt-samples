@@ -1,12 +1,12 @@
 <template>
   <div class="wrap">
-    <button v-if="true" type="button" @click="startCamera">カメラ起動</button>
-    <div>
+    <button type="button" @click="startCamera">カメラ起動</button>
+    <div v-if="isActiveCamera">
       <video width="300" height="200" class="video" ref="video"></video>
       <div class="img-box">
         <canvas class="canvas" ref="canvasFull"></canvas>
       </div>
-      <p ref="result"></p>
+      <p>result: {{ result }}</p>
       <button type="button" @click="readImageText">読み取る</button>
     </div>
   </div>
@@ -24,9 +24,10 @@ const isActiveCamera = ref<boolean>(false);
 const video = ref<HTMLVideoElement | null>(null);
 const canvasFull = ref<HTMLCanvasElement | null>(null);
 const canvasView = ref<HTMLCanvasElement | null>(null);
-const result = ref<HTMLParagraphElement | null>(null);
+const result = ref<string>('');
 
 const videoToCanvas = () => {
+  console.log('videoToCanvas()');
   if (!video.value || !canvasFull.value) return;
 
   canvasFull.value.width = VIEW_WIDTH + 50;
@@ -84,9 +85,7 @@ const startCamera = () => {
   if (process.client) {
     navigator.mediaDevices
       .getUserMedia({
-        video: {
-          facingMode: 'environment',
-        },
+        video: true,
         audio: false,
       })
       .then((stream) => {
@@ -111,7 +110,7 @@ const readImageText = async () => {
   });
 
   (async () => {
-    if (!canvasView.value || !result.value) return;
+    if (!canvasView.value) return;
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
     await worker.setParameters({
@@ -121,7 +120,7 @@ const readImageText = async () => {
       data: { text },
     } = await worker.recognize(canvasView.value.toDataURL());
     console.log(text);
-    result.value.textContent = text;
+    result.value = text;
     await worker.terminate();
   })();
 };
@@ -138,7 +137,7 @@ const readImageText = async () => {
 .video {
   object-fit: cover;
   object-position: center;
-  /* display: none; */
+  display: none;
 }
 
 .img-box {
