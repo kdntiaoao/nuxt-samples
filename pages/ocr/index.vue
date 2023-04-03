@@ -85,7 +85,9 @@ const startCamera = () => {
   if (process.client) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: {
+          facingMode: 'environment',
+        },
         audio: false,
       })
       .then((stream) => {
