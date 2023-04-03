@@ -137,7 +137,7 @@ const readImageText = async () => {
 .video {
   object-fit: cover;
   object-position: center;
-  display: none;
+  /* display: none; */
 }
 
 .img-box {
