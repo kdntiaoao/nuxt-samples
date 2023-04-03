@@ -2,7 +2,7 @@
   <div class="wrap">
     <button type="button" @click="startCamera">カメラ起動</button>
     <div v-if="isActiveCamera">
-      <video width="300" height="200" class="video" ref="video"></video>
+      <video class="video" ref="video" autoplay muted playsinline></video>
       <div class="img-box">
         <canvas class="canvas" ref="canvasFull"></canvas>
       </div>
