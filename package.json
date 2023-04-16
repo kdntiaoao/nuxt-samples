@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "modern-css-reset": "^1.4.0",
+    "pixi.js": "^7.2.4",
     "tesseract.js": "^4.0.3"
   }
 }
