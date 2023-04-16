@@ -8,7 +8,7 @@
         </li>
         <li><NuxtLink class="link" to="/swipe-btn">swipe-btn</NuxtLink></li>
         <li><NuxtLink class="link" to="/ocr">ocr</NuxtLink></li>
-        <li><NuxtLink class="link" to="/ocr">PIXI</NuxtLink></li>
+        <li><NuxtLink class="link" to="/pixi">PIXI</NuxtLink></li>
       </ul>
     </div>
   </div>
