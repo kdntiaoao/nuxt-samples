@@ -4,35 +4,33 @@
 
 <script setup lang="ts">
 import * as PIXI from 'pixi.js'
-import sun from '@/sprites/sun'
-import mercury from '@/sprites/mercury'
+import { Sun } from '@/sprites/Sun'
+import { Planet } from '@/sprites/Planet'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
 onMounted(() => {
-  if (!canvasRef.value || !sun || !mercury) return
-
-  const canvasW = innerWidth - 10
-  const canvasH = innerHeight - 10
+  if (!canvasRef.value) return
 
   const app = new PIXI.Application({
-    width: canvasW,
-    height: canvasH,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    antialias: true,
     view: canvasRef.value,
     backgroundColor: '#fde',
   })
-  sun.x = app.screen.width / 2
-  sun.y = app.screen.height / 2
+  const sun = new Sun(app.screen.width / 2, app.screen.height / 2)
   app.stage.addChild(sun)
-  mercury.x = app.screen.width / 2 + 100
-  mercury.y = app.screen.height / 2
-  app.stage.addChild(mercury)
-  let elapsed = 0.0
+  const planet1 = new Planet(app.screen.width / 2, app.screen.height / 2, 100)
+  app.stage.addChild(planet1)
+  const planet2 = new Planet(app.screen.width / 2, app.screen.height / 2, 150)
+  app.stage.addChild(planet2)
+
   app.ticker.add((delta) => {
-    if (!mercury) return
-    elapsed += delta
-    mercury.x = app.screen.width / 2 + Math.cos(elapsed / 40) * 100
-    mercury.y = app.screen.height / 2 + Math.sin(elapsed / 40) * 100
+    planet1.revolve()
+  })
+  app.ticker.add((delta) => {
+    planet2.revolve()
   })
 })
 </script>

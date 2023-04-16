@@ -1,9 +1,12 @@
 import * as PIXI from 'pixi.js'
 
-let sun: PIXI.Graphics | null = null
+export class Sun extends PIXI.Graphics {
+  constructor(x: number, y: number) {
+    super()
 
-if (process.client) {
-  sun = new PIXI.Graphics().beginFill(0xff3300).drawCircle(0, 0, 40).endFill()
+    this.x = x
+    this.y = y
+
+    this.beginFill(0xff3300).drawCircle(0, 0, 40).endFill()
+  }
 }
-
-export default sun
