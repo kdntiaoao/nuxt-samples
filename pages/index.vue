@@ -9,6 +9,7 @@
         <li><NuxtLink class="link" to="/swipe-btn">swipe-btn</NuxtLink></li>
         <li><NuxtLink class="link" to="/ocr">ocr</NuxtLink></li>
         <li><NuxtLink class="link" to="/pixi">PIXI</NuxtLink></li>
+        <li><NuxtLink class="link" to="/pixi/shooting01">shooting01</NuxtLink></li>
       </ul>
     </div>
   </div>
