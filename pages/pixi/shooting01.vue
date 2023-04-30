@@ -45,7 +45,7 @@ onMounted(() => {
         y + circle.y <= 0 ||
         y + circle.y >= app.screen.height
       ) {
-        app.stage.removeChild(circle)
+        circle.destroy()
         app.ticker.remove(animate)
         objCount--
         text.text = objCount
