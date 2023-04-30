@@ -33,8 +33,8 @@ onMounted(() => {
 
   app.stage.addChild(text)
 
-  const addCircle = (x: number, y: number, direction: number = 0) => {
-    const circle = new PIXI.Graphics().beginFill(0xaaaaaa).drawCircle(x, y, 10)
+  const addCircle = (x: number, y: number, direction: number = 0, hue: number = 0) => {
+    const circle = new PIXI.Graphics().beginFill({ h: hue, s: 63, l: 80 }).drawCircle(x, y, 10)
     app.stage.addChild(circle)
     const animate = (time: number) => {
       circle.x += time * 3 * Math.cos(direction)
@@ -62,8 +62,9 @@ onMounted(() => {
 
   fullRect.eventMode = 'static'
   fullRect.on('pointertap', (ev) => {
+    const random = (Math.random() * 365) | 0
     for (let i = 0; i < CIRCLES_PER_CLICK * 2; i++) {
-      addCircle(ev.screenX, ev.screenY, (Math.PI * i) / CIRCLES_PER_CLICK)
+      addCircle(ev.screenX, ev.screenY, (Math.PI * i) / CIRCLES_PER_CLICK, random)
     }
   })
 
