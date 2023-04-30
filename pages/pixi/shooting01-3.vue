@@ -56,36 +56,17 @@ onMounted(() => {
     text.text = objCount
   }
 
-  const spreadCircles = (ev: PIXI.FederatedPointerEvent) => {
-    const random = (Math.random() * 365) | 0
-    for (let i = 0; i < CIRCLES_PER_CLICK * 2; i++) {
-      addCircle(ev.screenX, ev.screenY, (Math.PI * i) / CIRCLES_PER_CLICK, random)
-    }
-  }
-
-  let pointerEventTimerId = 0
-  const onPointerdownEvent = (ev: PIXI.FederatedPointerEvent) => {
-    spreadCircles(ev)
-    const loop = (ev: PIXI.FederatedPointerEvent) => {
-      pointerEventTimerId = window.setTimeout(() => {
-        spreadCircles(ev)
-        loop(ev)
-      }, 100)
-    }
-    loop(ev)
-  }
-
   const fullRect = new PIXI.Graphics()
     .beginFill(0x444444)
     .drawRect(app.screen.width / 6, 0, app.screen.width / 1.5, app.screen.height)
 
-  const removePointerdownEvent = () => {
-    window.clearTimeout(pointerEventTimerId)
-  }
-
   fullRect.eventMode = 'static'
-  fullRect.on('pointerdown', onPointerdownEvent).on('pointerup', removePointerdownEvent)
-  window.addEventListener('pointerup', removePointerdownEvent)
+  fullRect.on('pointertap', (ev) => {
+    const random = (Math.random() * 365) | 0
+    for (let i = 0; i < CIRCLES_PER_CLICK * 2; i++) {
+      addCircle(ev.screenX, ev.screenY, (Math.PI * i) / CIRCLES_PER_CLICK, random)
+    }
+  })
 
   app.stage.addChild(fullRect)
 })
