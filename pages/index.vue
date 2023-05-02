@@ -1,13 +1,19 @@
 <template>
   <div class="wrap">
-    <p class="title">List</p>
-    <div class="content">
+    <div>
+      <p class="title">List</p>
       <ul class="list">
         <li>
-          <NuxtLink class="link" to="/long-press-btn">long-press-btn</NuxtLink>
+          <NuxtLink class="link" to="/long-press-btn">長押しボタン</NuxtLink>
         </li>
-        <li><NuxtLink class="link" to="/swipe-btn">swipe-btn</NuxtLink></li>
-        <li><NuxtLink class="link" to="/ocr">ocr</NuxtLink></li>
+        <li><NuxtLink class="link" to="/swipe-btn">スワイプボタン</NuxtLink></li>
+        <li><NuxtLink class="link" to="/ocr">OCR</NuxtLink></li>
+        <li><NuxtLink class="link" to="/turn-page">ページめくり</NuxtLink></li>
+      </ul>
+    </div>
+    <div>
+      <p class="title mt20">PIXI</p>
+      <ul class="list">
         <li><NuxtLink class="link" to="/pixi">PIXI</NuxtLink></li>
         <li><NuxtLink class="link" to="/pixi/shooting01">shooting01</NuxtLink></li>
       </ul>
@@ -28,10 +34,6 @@
   margin-left: auto;
 }
 
-.content {
-  margin-top: 1rem;
-}
-
 .list {
   display: grid;
   gap: 0.8rem;
@@ -44,5 +46,9 @@
   border-radius: 0.5rem;
   text-decoration: none;
   color: #fff;
+}
+
+.mt20 {
+  margin-top: 20px;
 }
 </style>
