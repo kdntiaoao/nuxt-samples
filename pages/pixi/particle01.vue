@@ -78,10 +78,6 @@ onMounted(() => {
     app.ticker.add(animate)
   }
 
-  const renderedArea = new PIXI.Graphics()
-    .beginFill(0x444444)
-    .drawRect(renderedAreaSize.x.from, renderedAreaSize.y.from, renderedAreaSize.width, renderedAreaSize.height)
-
   const addParticles = (ev: PIXI.FederatedPointerEvent) => {
     const radius = Math.random() * (CIRCLE_MAX_RADIUS / 2) + CIRCLE_MAX_RADIUS / 2
     const direction = -Math.PI / 2 + (Math.random() - 0.5) / 2
@@ -89,6 +85,10 @@ onMounted(() => {
     const hue = Math.random() * 365
     addCircle(ev.screenX, ev.screenY, radius, direction, velocity, hue)
   }
+
+  const renderedArea = new PIXI.Graphics()
+    .beginFill(0x444444)
+    .drawRect(renderedAreaSize.x.from, renderedAreaSize.y.from, renderedAreaSize.width, renderedAreaSize.height)
 
   renderedArea.eventMode = 'static'
   renderedArea.on('pointertap', addParticles)
