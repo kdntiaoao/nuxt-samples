@@ -45,20 +45,41 @@
         large
       </label>
     </div>
-    <FallingCircles :amount="amount" :speed="speed" :size="size" />
+    <div class="mt20">
+      <p class="title">オブジェクトの形</p>
+      <label class="field-radio">
+        <input type="radio" v-model="shape" value="circle" />
+        circle
+      </label>
+      <label class="field-radio">
+        <input type="radio" v-model="shape" value="square" />
+        square
+      </label>
+      <label class="field-radio">
+        <input type="radio" v-model="shape" value="triangle" />
+        triangle
+      </label>
+      <label class="field-radio">
+        <input type="radio" v-model="shape" value="random" />
+        random
+      </label>
+    </div>
+    <FallingObjects :amount="amount" :speed="speed" :size="size" :shape="shape" />
   </div>
 </template>
 
 <script setup lang="ts">
-import FallingCircles from '~~/components/pixi/FallingCircles.vue'
+import FallingObjects from '~~/components/pixi/FallingObjects.vue'
 
 type Amount = 'small' | 'medium' | 'large'
 type Speed = 'slow' | 'medium' | 'fast'
 type Size = 'small' | 'medium' | 'large'
+type Shape = 'circle' | 'square' | 'triangle' | 'random'
 
 const amount = ref<Amount>('medium')
 const speed = ref<Speed>('medium')
 const size = ref<Size>('medium')
+const shape = ref<Shape>('circle')
 </script>
 
 <style scoped>

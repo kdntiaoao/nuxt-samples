@@ -10,16 +10,19 @@ import * as PIXI from 'pixi.js'
 type Amount = 'small' | 'medium' | 'large'
 type Speed = 'slow' | 'medium' | 'fast'
 type Size = 'small' | 'medium' | 'large'
+type Shape = 'circle' | 'square' | 'triangle' | 'random'
 type Props = {
   amount: Amount
   speed: Speed
   size: Size
+  shape: Shape
 }
 
 const props = withDefaults(defineProps<Props>(), {
   amount: 'medium',
   speed: 'medium',
   size: 'medium',
+  shape: 'circle',
 })
 
 const fallingDurationList = {
@@ -86,29 +89,59 @@ onMounted(() => {
   text.zIndex = 10
   container.addChild(text)
 
-  const addCircle = (x: number, y: number, size: number = 20, direction: number = -Math.PI / 2, hue: number = 0) => {
-    const circle = new PIXI.Graphics().beginFill({ h: hue, s: 63, l: 80 }).drawCircle(x, y, size / 2)
-    circle.zIndex = size
+  const addObject = (
+    x: number,
+    y: number,
+    size: number,
+    shape: Shape,
+    direction: number = -Math.PI / 2,
+    hue: number = 0
+  ) => {
+    const object = new PIXI.Graphics().beginFill({ h: hue, s: 63, l: 80 })
+
+    if (shape === 'circle') {
+      object.drawCircle(0, 0, size / 2).endFill()
+    } else if (shape === 'square') {
+      object.drawRect(0, 0, size, size).endFill()
+    } else if (shape === 'triangle') {
+      const triangleHeight = (Math.sqrt(3) / 2) * size
+      object.drawPolygon([size / 2, 0, 0, triangleHeight, size, triangleHeight])
+    } else if (shape === 'random') {
+      const r = Math.random()
+      if (r < 0.3) {
+        object.drawCircle(0, 0, size / 2).endFill()
+      } else if (r < 0.6) {
+        object.drawRect(0, 0, size, size).endFill()
+      } else {
+        const triangleHeight = (Math.sqrt(3) / 2) * size
+        object.drawPolygon([size / 2, 0, 0, triangleHeight, size, triangleHeight])
+      }
+    }
+
+    object.rotation = Math.PI * Math.random()
+    object.x = x
+    object.y = y
+
     const ratio = (maxSizeList[props.size] - size) / maxSizeList[props.size]
+    object.zIndex = 1 / ratio
     const blurFilter = new PIXI.BlurFilter(ratio * 10)
-    circle.filters = [blurFilter]
-    circle.zIndex = 1 / ratio
-    container.addChild(circle)
+    object.filters = [blurFilter]
+    container.addChild(object)
     objCount++
     text.text = objCount
 
     const animate = (time: number) => {
       const velocity = (size / maxSizeList[props.size]) * fallingVelocityList[props.speed]
-      circle.x += time * velocity * Math.cos(direction)
-      circle.y -= time * velocity * Math.sin(direction)
+      object.x += time * velocity * Math.cos(direction)
+      object.y -= time * velocity * Math.sin(direction)
       if (
-        x + circle.x < renderedAreaSize.x.from - maxSizeList[props.size] ||
-        x + circle.x > renderedAreaSize.x.to + maxSizeList[props.size] ||
-        y + circle.y < renderedAreaSize.y.from - maxSizeList[props.size] ||
-        y + circle.y > renderedAreaSize.y.to + maxSizeList[props.size]
+        object.x < renderedAreaSize.x.from - maxSizeList[props.size] ||
+        object.x > renderedAreaSize.x.to + maxSizeList[props.size] ||
+        object.y < renderedAreaSize.y.from - maxSizeList[props.size] ||
+        object.y > renderedAreaSize.y.to + maxSizeList[props.size]
       ) {
-        app.stage.removeChild(circle)
-        circle.destroy()
+        app.stage.removeChild(object)
+        object.destroy()
         app.ticker.remove(animate)
         objCount--
         text.text = objCount
@@ -129,7 +162,7 @@ onMounted(() => {
       const direction = -Math.PI / 2 + (Math.random() - 0.5) / 2
       const hue = Math.random() * 365
 
-      addCircle(x, -size / 2, size, direction, hue)
+      addObject(x, -size / 2, size, props.shape, direction, hue)
 
       startTime = null
     }
