@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div class="mt20">
-      <p class="title">amount</p>
+      <p class="title">落ちるオブジェクトの量</p>
       <label class="field-radio">
         <input type="radio" v-model="amount" value="small" />
         small
@@ -16,7 +16,7 @@
       </label>
     </div>
     <div class="mt20">
-      <p class="title">speed</p>
+      <p class="title">落ちる速度</p>
       <label class="field-radio">
         <input type="radio" v-model="speed" value="slow" />
         slow
@@ -30,7 +30,22 @@
         fast
       </label>
     </div>
-    <FallingCircles :amount="amount" :speed="speed" />
+    <div class="mt20">
+      <p class="title">オブジェクトの大きさ</p>
+      <label class="field-radio">
+        <input type="radio" v-model="size" value="small" />
+        small
+      </label>
+      <label class="field-radio">
+        <input type="radio" v-model="size" value="medium" />
+        medium
+      </label>
+      <label class="field-radio">
+        <input type="radio" v-model="size" value="large" />
+        large
+      </label>
+    </div>
+    <FallingCircles :amount="amount" :speed="speed" :size="size" />
   </div>
 </template>
 
@@ -39,9 +54,11 @@ import FallingCircles from '~~/components/pixi/FallingCircles.vue'
 
 type Amount = 'small' | 'medium' | 'large'
 type Speed = 'slow' | 'medium' | 'fast'
+type Size = 'small' | 'medium' | 'large'
 
 const amount = ref<Amount>('medium')
 const speed = ref<Speed>('medium')
+const size = ref<Size>('medium')
 </script>
 
 <style scoped>
