@@ -7,6 +7,8 @@ import * as PIXI from 'pixi.js'
 
 const G = 9.80665 * 10 // 重力を強くしている
 const CIRCLES_PER_CLICK = 20
+const CIRCLE_MIN_RADIUS = 2
+const CIRCLE_MAX_RADIUS = 8
 
 let objCount = 0
 
@@ -45,9 +47,8 @@ onMounted(() => {
   text.zIndex = 100
   container.addChild(text)
 
-  const addAfterimage = (x: number, y: number) => {
-    const circleRadius = 10
-    const circle = new PIXI.Graphics().beginFill(0x999999).drawCircle(x, y, circleRadius)
+  const addAfterimage = (x: number, y: number, radius: number) => {
+    const circle = new PIXI.Graphics().beginFill(0x999999).drawCircle(x, y, radius)
     circle.alpha = 0.4
     container.addChild(circle)
 
@@ -64,7 +65,7 @@ onMounted(() => {
   }
 
   const addCircle = (iniX: number, iniY: number, velocity: number, direction: number) => {
-    const circleRadius = 10
+    const circleRadius = Math.random() * (CIRCLE_MAX_RADIUS - CIRCLE_MIN_RADIUS) + CIRCLE_MIN_RADIUS
     const circle = new PIXI.Graphics().beginFill({ h: 40, s: 63, l: 80 }).drawCircle(iniX, iniY, circleRadius)
     circle.zIndex = 10
     container.addChild(circle)
@@ -73,7 +74,7 @@ onMounted(() => {
 
     let t = 0
     const animate = (time: number) => {
-      addAfterimage(iniX + circle.x, iniY + circle.y)
+      addAfterimage(iniX + circle.x, iniY + circle.y, circleRadius)
       t += (time / 60) * 2
       circle.x = velocity * Math.cos(direction) * t
       circle.y = -(velocity * Math.sin(direction) * t - (1 / 2) * G * t ** 2)
@@ -98,9 +99,10 @@ onMounted(() => {
     const iniX = ev.screenX
     const iniY = ev.screenY
     const velocity = 120
+    const random = Math.random()
 
     for (let i = 0; i < CIRCLES_PER_CLICK; i++) {
-      addCircle(iniX, iniY, velocity, (Math.PI * i) / ((CIRCLES_PER_CLICK - 1) / 2))
+      addCircle(iniX, iniY, velocity, (Math.PI * i) / ((CIRCLES_PER_CLICK - 1) / 2) + random)
     }
   }
 
