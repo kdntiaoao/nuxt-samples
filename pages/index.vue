@@ -19,6 +19,7 @@
         <li><NuxtLink class="link" to="/pixi/particle01">particle01</NuxtLink></li>
         <li><NuxtLink class="link" to="/pixi/particle02">particle02</NuxtLink></li>
         <li><NuxtLink class="link" to="/pixi/particle03">particle03</NuxtLink></li>
+        <li><NuxtLink class="link" to="/pixi/firework01">firework01</NuxtLink></li>
       </ul>
     </div>
   </div>
