@@ -3,16 +3,23 @@ import * as PIXI from 'pixi.js'
 export type DataItem = { label: string; value: number }
 
 export class RadarChartData extends PIXI.Graphics {
-  constructor(centerX: number, centerY: number, radius: number, data: DataItem[], color: number) {
+  constructor(
+    centerX: number,
+    centerY: number,
+    radius: number,
+    data: DataItem[],
+    min: number,
+    max: number,
+    color: number
+  ) {
     super()
 
-    const pointsBase = []
+    const pointsBase = getPolygonApexesPoints(data.length, radius)
     const pointsData = []
     for (let i = 0; i < data.length; i++) {
-      const radian = (2 / data.length) * Math.PI * i
-      const value = radius * Math.max(data[i].value, 0.05)
-      pointsBase.push([Math.sin(radian) * radius, -Math.cos(radian) * radius])
-      pointsData.push([Math.sin(radian) * value, -Math.cos(radian) * value])
+      const value = Math.max(data[i].value, min / 2)
+      const ratio = Math.min(value / max, 1.2)
+      pointsData.push([pointsBase[i][0] * ratio, pointsBase[i][1] * ratio])
     }
     const bottomPointY = Math.max(...pointsBase.map((p) => p[1]))
 

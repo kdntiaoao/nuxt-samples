@@ -4,11 +4,7 @@ export class RadarChartBase extends PIXI.Graphics {
   constructor(centerX: number, centerY: number, radius: number, apexesCount: number, color: number) {
     super()
 
-    const points = []
-    for (let i = 0; i < apexesCount; i++) {
-      const radian = (2 / apexesCount) * Math.PI * i
-      points.push([Math.sin(radian) * radius, -Math.cos(radian) * radius])
-    }
+    const points = getPolygonApexesPoints(apexesCount, radius)
     const bottomPointY = Math.max(...points.map((p) => p[1]))
 
     const fixedPoints = points
