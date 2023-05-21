@@ -53,5 +53,27 @@ onMounted(() => {
 
   const radarChartScales = new RadarChartScales(centerX, centerY, radius, props.data.length, 4, 0x555555)
   container.addChild(radarChartScales)
+
+  const points = getPolygonApexesPoints(props.data.length, radius)
+  const bottomPointY = Math.max(...points.map((p) => p[1]))
+  const fixedPoints = points.map((point) => [point[0] + centerX, point[1] + centerY + (radius - bottomPointY) / 2])
+
+  for (let i = 0; i < props.data.length; i++) {
+    const d = props.data[i]
+    const label = d.label
+    const value = d.value
+
+    const text = new PIXI.Text(label, {
+      fontFamily: 'Arial',
+      fontSize: 14,
+      fill: 0xff1010,
+      align: 'center',
+    })
+
+    text.x = fixedPoints[i][0] - text.width / 2
+    text.y = fixedPoints[i][1] - text.height / 2
+
+    container.addChild(text)
+  }
 })
 </script>
