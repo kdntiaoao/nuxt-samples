@@ -45,6 +45,7 @@ onMounted(() => {
   const centerY = app.screen.height / 2
   const radius = Math.min(app.screen.width / 2, app.screen.height / 2) - 20
 
+  // TODO: 色などのスタイルの指定をプロップスで渡せるようにする
   const radarChartBase = new RadarChartBase(centerX, centerY, radius, props.data.length, 0xcccccc)
   container.addChild(radarChartBase)
 
@@ -55,14 +56,15 @@ onMounted(() => {
   container.addChild(radarChartScales)
 
   const points = getPolygonApexesPoints(props.data.length, radius)
+  // TODO: bottomPointY と fixedPoint がいろんなところ書かれているので、getPolygonApexesPoints() で管理したい
   const bottomPointY = Math.max(...points.map((p) => p[1]))
   const fixedPoints = points.map((point) => [point[0] + centerX, point[1] + centerY + (radius - bottomPointY) / 2])
 
   for (let i = 0; i < props.data.length; i++) {
     const d = props.data[i]
     const label = d.label
-    const value = d.value
 
+    // TODO: ラベルの位置を修正
     const text = new PIXI.Text(label, {
       fontFamily: 'Arial',
       fontSize: 14,
